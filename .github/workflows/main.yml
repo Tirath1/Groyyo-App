@@ -9,6 +9,13 @@ jobs:
       - name: Install npm dependencies
         run: |
           npm install
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          ndk: 21.0.6113669
+          cmake: 3.10.2.4988404
+          script: ./gradlew connectedCheck
   
   build-android:
     needs: install-and-test
