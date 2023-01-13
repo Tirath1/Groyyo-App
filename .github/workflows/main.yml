@@ -15,7 +15,7 @@ jobs:
           api-level: 29
           ndk: 21.0.6113669
           cmake: 3.10.2.4988404
-          script: ./gradlew connectedCheck
+          
   
   build-android:
     needs: install-and-test
@@ -27,9 +27,8 @@ jobs:
           npm install
       - name: Build Android Release
         run: |
-          cd android && ./gradlew assembleRelease
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/
+         npx detox build --configuration android.emu.release
+      - name: test
+        run: |
+         npx detox test --configuration android.emu.release
+      
