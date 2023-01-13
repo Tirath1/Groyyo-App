@@ -15,9 +15,7 @@ jobs:
           api-level: 29
           ndk: 21.0.6113669
           cmake: 3.10.2.4988404
-          script: cd ./android && ./gradlew connectedCheck
-
-  
+          script: npx detox build --configuration android.emu.release
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
