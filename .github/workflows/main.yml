@@ -21,7 +21,7 @@ jobs:
     - name: Install Java JDK
       uses: actions/setup-java@v3
       with:
-        distribution: 'temurin'
+        distribution: 'corretto'
         java-version: '11'
 
     - name: Download Android Emulator Image
