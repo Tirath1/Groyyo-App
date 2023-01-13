@@ -1,37 +1,30 @@
-name: Android
-
-on: [push]
-
+name: react-native
+on:
+  push:
+    branches:
+      - master
 jobs:
-  build:
+  install-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
-
-    - name: Node
-      uses: actions/setup-node@v1
-
-  
-    - name: Download Android Emulator Image
+      - uses: actions/checkout@v3
+      - name: Install npm dependencies
+        run: |
+          npm install
+  build-android:
+    needs: install-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install npm dependencies
+        run: |
+          npm install
+      - name: Download Android Emulator Image
       run: |
         echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-29;google_apis;x86"
         echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Nexus 5X" -k 'system-images;android-29;google_apis;x86'
         $ANDROID_HOME/emulator/emulator -list-avds
-
-    - name: Install node_modules
-      run: |
-        yarn install --frozen-lockfile
-    
-    - name: Build for detox
-      run: |
-        yarn build-detox-android
-
-    - name: Android Emulator
+       - name: Android Emulator
       timeout-minutes: 10
       continue-on-error: true
       run: |
@@ -40,13 +33,4 @@ jobs:
         $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
         $ANDROID_HOME/platform-tools/adb devices
         echo "Emulator started"
-
-    - name: Android Detox
-      run: yarn start & yarn test-detox-android
-
-    - name: Store Detox artifacts on test failure
-      uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: detox-artifacts
-        path: artifacts # Default path for Detox artifacts
+      
