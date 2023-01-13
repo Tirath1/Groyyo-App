@@ -29,6 +29,7 @@ const App: React.FC = () => {
 const styles = StyleSheet.create({
   flex1: {
     flex: 1,
+    justifyContent: 'center',
   },
 });
 
