@@ -32,7 +32,7 @@ jobs:
           target: google_apis
           arch: x86_64
           name: Pixel_3a_API_33_arm64-v8a
-          script: .android/gradlew connectedCheck
+          script: ./android/gradlew connectedCheck
     - name: Install node_modules
       run: |
         yarn install --frozen-lockfile
