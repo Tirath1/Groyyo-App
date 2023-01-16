@@ -36,26 +36,12 @@ jobs:
     - name: Install node_modules
       run: |
         yarn install --frozen-lockfile
-    
-    - name: Build for detox
-      run: |
-        npx detox build --configuration android.emu.release
-    - name: Android Emulator
-      timeout-minutes: 10
-      continue-on-error: true
-      run: |
-        echo "Starting emulator"
-        nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
-        $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
-        $ANDROID_HOME/platform-tools/adb devices
-        echo "Emulator started"
-    - name: Android Detox
-      run: yarn start & npx detox build --configuration android.emu.release
+        
+    - name: Android Detox build
+      run: npx detox build --configuration android.emu.
+
+    - name: Android Detox test
+      run: yarn start & npx detox test --configuration android.emu.release
 
 
-    - name: Store Detox artifacts on test failure
-      uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: detox-artifacts
-        path: artifacts # Default path for Detox artifacts
+
