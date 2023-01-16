@@ -18,11 +18,12 @@ jobs:
       with:
           node-version: 16
 
-    - name: Install Java JDK
-      uses: actions/setup-java@v3
+    - name: JDK environment Set Up
+      uses: actions/setup-java@v1.4.3
       with:
-        distribution: 'corretto'
-        java-version: '11'
+          java-version: 11.0.15
+
+
 
     - name: Download Android Emulator Image
       run: |
